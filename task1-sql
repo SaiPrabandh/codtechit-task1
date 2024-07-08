@@ -1,0 +1,86 @@
+/*DDL*/
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY ,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Publisher VARCHAR(255),
+    YearPublished YEAR,
+    Genre VARCHAR(100),
+    Quantity INT NOT NULL
+);
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY ,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    PhoneNumber VARCHAR(20),
+    Address TEXT
+);
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY ,
+    BookID INT,
+    MemberID INT,
+    DateBorrowed DATE NOT NULL,
+    DateReturned DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+/*DML*/
+INSERT INTO Books (Title, Author, Publisher, YearPublished, Genre, Quantity)
+VALUES ('The Guide', 'R.K. Narayan', 'Indian Thought Publications', 1958, 'Fiction', 10);
+
+INSERT INTO Books (Title, Author, Publisher, YearPublished, Genre, Quantity)
+VALUES ('A Suitable Boy', 'Vikram Seth', 'Aleph Book Company', 1993, 'Fiction', 7);
+
+INSERT INTO Books (Title, Author, Publisher, YearPublished, Genre, Quantity)
+VALUES ('The White Tiger', 'Aravind Adiga', 'HarperCollins', 2008, 'Fiction', 5);
+
+INSERT INTO Members (FirstName, LastName, Email, PhoneNumber, Address)
+VALUES ('Amit', 'Sharma', 'amit.sharma@example.com', '9876543210', '45 MG Road, Bengaluru, Karnataka');
+
+INSERT INTO Members (FirstName, LastName, Email, PhoneNumber, Address)
+VALUES ('Priya', 'Rao', 'priya.rao@example.com', '8765432109', '32 Park Street, Kolkata, West Bengal');
+
+INSERT INTO Members (FirstName, LastName, Email, PhoneNumber, Address)
+VALUES ('Rahul', 'Verma', 'rahul.verma@example.com', '7654321098', '120 Nehru Place, New Delhi, Delhi');
+
+INSERT INTO Transactions (BookID, MemberID, DateBorrowed)
+VALUES (1, 1, '2024-07-01');
+
+INSERT INTO Transactions (BookID, MemberID, DateBorrowed)
+VALUES (2, 2, '2024-07-02');
+
+INSERT INTO Transactions (BookID, MemberID, DateBorrowed)
+VALUES (3, 3, '2024-07-03');
+
+UPDATE Books
+SET Quantity = Quantity - 1
+WHERE BookID = 1;
+
+UPDATE Members
+SET Email = 'amit.sharma.new@example.com'
+WHERE MemberID = 1;
+
+UPDATE Transactions
+SET DateReturned = '2024-07-08'
+WHERE TransactionID = 1;
+
+DELETE FROM Books
+WHERE BookID = 1;
+
+DELETE FROM Members
+WHERE MemberID = 1;
+
+DELETE FROM Transactions
+WHERE TransactionID = 1;
+
+SELECT * FROM Books;
+
+SELECT * FROM Members;
+
+SELECT * FROM Transactions;
+
+SELECT Books.Title, Books.Author, Transactions.DateBorrowed
+FROM Transactions
+JOIN Books ON Transactions.BookID = Books.BookID
+WHERE Transactions.MemberID = 1 AND Transactions.DateReturned IS NULL;
